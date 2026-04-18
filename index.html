@@ -152,6 +152,7 @@
                 { pattern: "連携", cat: "共有", label: "一貫した支援", text: "訪問支援での知見を園側と共有し、園と家庭、事業所が足並みを揃えた一貫性のある支援を提供できるよう調整します。" }
             ],
             transition: [
+                { pattern: "連携", cat: "移行支援", label: "園との生活状況共有", text: "園での生活状況と事業所での支援内容について、必要に応じて情報共有を行う。" },
                 { pattern: "標準的・汎用", cat: "移行支援", label: "円滑な移行", text: "就学先や移行先の施設に対し、本人の特性や有効な支援方法、集団内での様子について情報共有を行い、円滑な移行を図る。" },
                 { pattern: "併設園の強み", cat: "移行支援", label: "具体的エピソード", text: "保育所での集団生活における具体的なエピソードや、環境設定による適応状況を整理し、移行先での配慮事項として共有を図る。" },
                 { pattern: "連携重視", cat: "移行支援", label: "体制構築", text: "関係機関と緊密に連携し、個別支援計画やケース会議を通して、本人の特性に合わせた合理的配慮や一貫した支援体制を構築する。" },
@@ -163,6 +164,7 @@
                 { pattern: "適応重視", cat: "情報共有", label: "環境共有", text: "園（保育所）生活で培った集団適応のスキルを学校生活でも発揮できるよう、具体的な環境設定や配慮事項について学校側と共有・連携する。" }
             ],
             family: [
+                { pattern: "専門的", cat: "家族支援", label: "活動目的と変化の共有", text: "身体の使い方の変化や、この動きをするとどのような育みがあるのか、どのような目的で活動を展開しているかを、適宜お伝えする。" },
                 { pattern: "包括的", cat: "家族支援", label: "家庭生活の安定", text: "家族との面談や日々の相談を通じ、行動や言葉の背景にある本人の特性への理解を深めるとともに、適切な対応を共有することで家庭生活の安定と充実を図る。" },
                 { pattern: "共感・伴走", cat: "家族支援", label: "一貫性のある関わり", text: "療育場面や面談を通じ、本人の行動意図や内的状況を家族へ丁寧に伝え、共通の理解に基づいた一貫性のある関わりを行うことで、豊かな生活の実現を支援する。" },
                 { pattern: "簡潔", cat: "家族支援", label: "三者一体の向上", text: "定期的な面談や相談の機会を設け、本人の行動背景や特性に合わせた関わり方を家族と共有し、園・家庭・事業所が一体となって生活の質を向上させる。" }
@@ -202,7 +204,7 @@
                 if(item.pattern.includes("標準")) patternColor = "bg-blue-50 text-blue-700 border border-blue-100";
                 if(item.pattern.includes("連携") || item.pattern.includes("共有")) patternColor = "bg-emerald-50 text-emerald-700 border border-emerald-100";
                 if(item.pattern.includes("重点") || item.pattern.includes("優先")) patternColor = "bg-violet-50 text-violet-700 border border-violet-100";
-                if(item.pattern.includes("加算")) patternColor = "bg-orange-50 text-orange-700 border border-orange-100";
+                if(item.pattern.includes("加算") || item.pattern.includes("専門性") || item.pattern.includes("専門的")) patternColor = "bg-orange-50 text-orange-700 border border-orange-100";
                 if(item.pattern.includes("簡潔")) patternColor = "bg-amber-50 text-amber-700 border border-amber-100";
 
                 html += `
@@ -242,7 +244,6 @@
             const text = document.getElementById('custom-text').value;
             if (!text.trim()) return;
 
-            // Using standard copy approach for iframe compatibility
             const temp = document.createElement('textarea');
             temp.value = text;
             document.body.appendChild(temp);
