@@ -3,10 +3,12 @@
     "id": "plan-child-specialist-system",
     "additionId": "child-specialist-system",
     "services": [
-      "child"
+      "child",
+      "after"
     ],
     "tabs": [
-      "child"
+      "child",
+      "after"
     ],
     "kind": "addition",
     "pattern": "計画への位置付け",
@@ -18,10 +20,12 @@
     "id": "plan-child-specialist-delivery",
     "additionId": "child-specialist-delivery",
     "services": [
-      "child"
+      "child",
+      "after"
     ],
     "tabs": [
-      "child"
+      "child",
+      "after"
     ],
     "kind": "addition",
     "pattern": "計画への位置付け",
@@ -33,11 +37,13 @@
     "id": "plan-child-agency-1",
     "additionId": "child-agency-1",
     "services": [
-      "child"
+      "child",
+      "after"
     ],
     "tabs": [
       "child",
-      "sharing"
+      "sharing",
+      "after"
     ],
     "kind": "addition",
     "pattern": "計画への位置付け",
@@ -49,11 +55,13 @@
     "id": "plan-child-agency-2",
     "additionId": "child-agency-2",
     "services": [
-      "child"
+      "child",
+      "after"
     ],
     "tabs": [
       "child",
-      "sharing"
+      "sharing",
+      "after"
     ],
     "kind": "addition",
     "pattern": "計画への位置付け",
@@ -65,11 +73,13 @@
     "id": "plan-child-agency-3",
     "additionId": "child-agency-3",
     "services": [
-      "child"
+      "child",
+      "after"
     ],
     "tabs": [
       "child",
-      "sharing"
+      "sharing",
+      "after"
     ],
     "kind": "addition",
     "pattern": "計画への位置付け",
@@ -81,23 +91,29 @@
     "id": "plan-child-agency-4",
     "additionId": "child-agency-4",
     "services": [
-      "child"
+      "child",
+      "after"
     ],
     "tabs": [
       "child",
-      "transition"
+      "transition",
+      "after"
     ],
     "kind": "addition",
     "pattern": "計画への位置付け",
     "cat": "加算",
     "label": "関係機関連携加算（Ⅳ）",
-    "text": "就学等の移行に際して、保護者の同意を得て、本人の状態と有効な支援方法を記載した文書を移行先に引き継ぎます。移行先との連絡調整や相談援助を行い、支援の継続につなげます。（関係機関連携加算Ⅳ）"
+    "text": "就学等の移行に際して、保護者の同意を得て、本人の状態と有効な支援方法を記載した文書を移行先に引き継ぎます。移行先との連絡調整や相談援助を行い、支援の継続につなげます。（関係機関連携加算Ⅳ）",
+    "serviceTexts": {
+      "after": "就職に際して、保護者の同意を得て、本人の状態と有効な支援方法を記載した文書を就職先に引き継ぎます。就職先との連絡調整や相談援助を行い、支援の継続につなげます。（関係機関連携加算Ⅳ）"
+    }
   },
   {
     "id": "plan-child-family-1",
     "additionId": "child-family-1",
     "services": [
-      "child"
+      "child",
+      "after"
     ],
     "tabs": [
       "family"
@@ -112,7 +128,8 @@
     "id": "plan-child-family-2",
     "additionId": "child-family-2",
     "services": [
-      "child"
+      "child",
+      "after"
     ],
     "tabs": [
       "family"
@@ -127,7 +144,8 @@
     "id": "plan-child-parenting-support",
     "additionId": "child-parenting-support",
     "services": [
-      "child"
+      "child",
+      "after"
     ],
     "tabs": [
       "family"
@@ -247,10 +265,12 @@
   {
     "id": "original-child-3",
     "services": [
-      "child"
+      "child",
+      "after"
     ],
     "tabs": [
-      "child"
+      "child",
+      "after"
     ],
     "kind": "general",
     "pattern": "標準",
@@ -261,10 +281,12 @@
   {
     "id": "original-child-4",
     "services": [
-      "child"
+      "child",
+      "after"
     ],
     "tabs": [
-      "child"
+      "child",
+      "after"
     ],
     "kind": "general",
     "pattern": "重点",
@@ -275,10 +297,12 @@
   {
     "id": "original-child-5",
     "services": [
-      "child"
+      "child",
+      "after"
     ],
     "tabs": [
-      "child"
+      "child",
+      "after"
     ],
     "kind": "general",
     "pattern": "標準",
@@ -318,7 +342,8 @@
     "id": "original-transition-1",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "transition"
@@ -327,13 +352,20 @@
     "pattern": "連携",
     "cat": "移行支援",
     "label": "園との生活状況共有",
-    "text": "園での生活状況と事業所での支援内容について、必要に応じて情報共有を行う。"
+    "text": "園での生活状況と事業所での支援内容について、必要に応じて情報共有を行う。",
+    "serviceTexts": {
+      "after": "学校での生活状況と事業所での支援内容について、必要に応じて情報共有を行う。"
+    },
+    "serviceLabels": {
+      "after": "学校との生活状況共有"
+    }
   },
   {
     "id": "original-transition-2",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "transition"
@@ -348,7 +380,8 @@
     "id": "original-transition-3",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "transition"
@@ -357,13 +390,17 @@
     "pattern": "併設園の強み",
     "cat": "移行支援",
     "label": "具体的エピソード",
-    "text": "保育所での集団生活における具体的なエピソードや、環境設定による適応状況を整理し、移行先での配慮事項として共有を図る。"
+    "text": "保育所での集団生活における具体的なエピソードや、環境設定による適応状況を整理し、移行先での配慮事項として共有を図る。",
+    "serviceTexts": {
+      "after": "学校での集団生活における具体的なエピソードや、環境設定による適応状況を整理し、移行先での配慮事項として共有を図る。"
+    }
   },
   {
     "id": "original-transition-4",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "transition"
@@ -378,7 +415,8 @@
     "id": "original-transition-5",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "transition"
@@ -393,7 +431,8 @@
     "id": "original-sharing-1",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "sharing"
@@ -408,7 +447,8 @@
     "id": "original-sharing-2",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "sharing"
@@ -423,7 +463,8 @@
     "id": "original-sharing-3",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "sharing"
@@ -432,13 +473,17 @@
     "pattern": "適応重視",
     "cat": "情報共有",
     "label": "環境共有",
-    "text": "園（保育所）生活で培った集団適応のスキルを学校生活でも発揮できるよう、具体的な環境設定や配慮事項について学校側と共有・連携する。"
+    "text": "園（保育所）生活で培った集団適応のスキルを学校生活でも発揮できるよう、具体的な環境設定や配慮事項について学校側と共有・連携する。",
+    "serviceTexts": {
+      "after": "これまでの生活で培った集団適応のスキルを学校生活でも発揮できるよう、具体的な環境設定や配慮事項について学校側と共有・連携する。"
+    }
   },
   {
     "id": "original-family-1",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "family"
@@ -453,7 +498,8 @@
     "id": "original-family-2",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "family"
@@ -468,7 +514,8 @@
     "id": "original-family-3",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "family"
@@ -483,7 +530,8 @@
     "id": "original-family-4",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "family"
@@ -492,13 +540,17 @@
     "pattern": "簡潔",
     "cat": "家族支援",
     "label": "三者一体の向上",
-    "text": "定期的な面談や相談の機会を設け、本人の行動背景や特性に合わせた関わり方を家族と共有し、園・家庭・事業所が一体となって生活の質を向上させる。"
+    "text": "定期的な面談や相談の機会を設け、本人の行動背景や特性に合わせた関わり方を家族と共有し、園・家庭・事業所が一体となって生活の質を向上させる。",
+    "serviceTexts": {
+      "after": "定期的な面談や相談の機会を設け、本人の行動背景や特性に合わせた関わり方を家族と共有し、学校・家庭・事業所が一体となって生活の質を向上させる。"
+    }
   },
   {
     "id": "original-special-1",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "special"
@@ -513,7 +565,8 @@
     "id": "original-special-2",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "special"
@@ -528,7 +581,8 @@
     "id": "original-special-3",
     "services": [
       "child",
-      "visit"
+      "visit",
+      "after"
     ],
     "tabs": [
       "special"
@@ -538,5 +592,54 @@
     "cat": "特記事項",
     "label": "事務的対応",
     "text": "諸事情（本人・園・学校都合）や長期休暇期間においては、提供日および提供時間を適宜変更・追加し、状況に応じた支援体制を敷く。"
+  },
+  {
+    "id": "plan-after-individual-support-3",
+    "additionId": "after-individual-support-3",
+    "services": [
+      "after"
+    ],
+    "tabs": [
+      "after",
+      "sharing",
+      "family"
+    ],
+    "kind": "addition",
+    "pattern": "計画への位置付け",
+    "cat": "加算",
+    "label": "個別サポート加算（Ⅲ）",
+    "text": "本人と家族の意向を確認し、学校と連携して不登校の状態に応じた支援を個別支援計画に位置付けます。学校との情報共有と家族への個別の相談援助を継続し、本人の状態に応じて支援を見直します。（個別サポート加算Ⅲ）"
+  },
+  {
+    "id": "plan-after-independence-support",
+    "additionId": "after-independence-support",
+    "services": [
+      "after"
+    ],
+    "tabs": [
+      "after",
+      "transition"
+    ],
+    "kind": "addition",
+    "pattern": "計画への位置付け",
+    "cat": "加算",
+    "label": "自立サポート加算",
+    "text": "本人と家族の学校卒業後の生活に向けた意向を確認し、学校と連携して自立サポート計画を作成します。進路選択に必要な自己理解、情報収集、体験や知識技能の習得を支援し、実施状況に応じて計画を見直します。（自立サポート加算）"
+  },
+  {
+    "id": "plan-after-independent-attendance",
+    "additionId": "after-independent-attendance",
+    "services": [
+      "after"
+    ],
+    "tabs": [
+      "after",
+      "special"
+    ],
+    "kind": "addition",
+    "pattern": "計画への位置付け",
+    "cat": "加算",
+    "label": "通所自立支援加算",
+    "text": "本人と保護者の意向を確認し、移動経路や本人の状態を評価した上で、安全に配慮した通所自立支援を計画に位置付けます。職員が同行し、交通機関の利用や徒歩での移動、緊急時の対応を段階的に支援します。（通所自立支援加算）"
   }
 ]
