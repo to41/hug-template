@@ -1,0 +1,107 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const { JSDOM, VirtualConsole } = require('jsdom');
+const root = path.resolve(__dirname, '..');
+
+async function boot(options = {}) {
+  const errors = [];
+  const virtualConsole = new VirtualConsole();
+  virtualConsole.on('error', error => errors.push(error));
+  virtualConsole.on('jsdomError', error => errors.push(error));
+  const dom = new JSDOM(fs.readFileSync(path.join(root,'index.html'),'utf8'), {url:'https://hug.example/',runScripts:'outside-only',virtualConsole});
+  const { window } = dom;
+  let clipboard = '';
+  window.navigator.clipboard = { writeText: async text => { clipboard = text; } };
+  window.fetch = async url => {
+    if (options.failData && url.endsWith('additions.json')) return {ok:false,status:500};
+    const data = JSON.parse(fs.readFileSync(path.join(root,url),'utf8'));
+    if (options.fixture && url.endsWith('templates.json')) data.push(options.fixture);
+    return {ok:true,json:async()=>data};
+  };
+  window.eval(fs.readFileSync(path.join(root,'app.js'),'utf8'));
+  for (let n=0; n<100 && window.document.getElementById('content-container').getAttribute('aria-busy')==='true'; n++) await new Promise(resolve=>setTimeout(resolve,2));
+  assert.equal(window.document.getElementById('content-container').getAttribute('aria-busy'),'false');
+  return {dom,window,document:window.document,errors,clipboard:()=>clipboard};
+}
+
+async function run() {
+  const ctx = await boot();
+  const { window:w, document:d } = ctx;
+  const cards = () => d.querySelectorAll('.card');
+  const card = id => d.querySelector(`[data-template-id="${id}"]`);
+  const clickTab = tab => d.querySelector(`[data-tab="${tab}"]`).click();
+  const search = query => { const input=d.getElementById('searchInput'); input.value=query; input.dispatchEvent(new w.Event('input')); };
+  const editor = d.getElementById('custom-text');
+  const copy = async () => {
+    d.getElementById('copyButton').click();
+    await new Promise(resolve => setTimeout(resolve, 0));
+  };
+  assert.equal(cards().length,9);
+  assert.equal(d.querySelector('[data-tab="visit"]').hidden,true);
+  card('plan-child-specialist-delivery').querySelector('.add-button').click();
+  const plan = editor.value;
+  assert.match(plan,/専門的支援実施計画/);
+  assert.ok(!plan.includes('月利用日数'),'Do not append rule notes to plan text');
+  const source=card('plan-child-specialist-delivery').querySelector('.rule-source a');
+  assert.match(source.href,/www\.cfa\.go\.jp.*#page=36$/);
+  assert.equal(source.rel,'noopener noreferrer');
+  clickTab('family'); assert.equal(cards().length,7);
+  d.querySelector('input[value="visit"]').click();
+  assert.equal(cards().length,6);
+  assert.equal(d.querySelector('[data-tab="child"]').hidden,true);
+  assert.equal(d.querySelector('[data-tab="visit"]').hidden,false);
+  assert.equal(card('plan-child-parenting-support'),null);
+  assert.match(card('plan-visit-family-1').textContent,/通常の訪問報告/);
+  clickTab('visit'); assert.equal(cards().length,7);
+  assert.ok(!d.getElementById('content-container').textContent.includes('専門的支援実施加算'));
+  search('訪問支援員特別加算（Ｉ）'); assert.equal(cards().length,1);
+  search('異なる 専門性'); assert.equal(cards().length,1);
+  search('ありえない検索語XYZ'); assert.equal(cards().length,0);
+  assert.match(d.querySelector('.empty-state').textContent,/見つかりません/);
+  search('');
+  const original=card('original-visit-3').querySelector('.plan-text').textContent;
+  card('original-visit-3').querySelector('button').click();
+  assert.equal(editor.value,plan+'\n'+original);
+  editor.value='直接編集した文章です。\n二行目😀'; editor.dispatchEvent(new w.Event('input'));
+  assert.equal(d.getElementById('charCount').textContent,Array.from(editor.value).length+'字');
+  await copy(); assert.equal(ctx.clipboard(),editor.value);
+  assert.match(d.getElementById('notification').textContent,/コピーしました/);
+  w.navigator.clipboard.writeText=async()=>{throw new Error('denied');};
+  d.execCommand=()=>false;
+  await copy(); assert.match(d.getElementById('notification').textContent,/コピーできませんでした/);
+  assert.equal(d.getElementById('notification').classList.contains('error'),true);
+  d.execCommand=()=>true;
+  editor.setSelectionRange(2,5);
+  await copy(); assert.match(d.getElementById('notification').textContent,/コピーしました/);
+  assert.equal(editor.selectionStart,2); assert.equal(editor.selectionEnd,5);
+  w.confirm=()=>false; d.getElementById('clearButton').click(); assert.ok(editor.value);
+  w.confirm=()=>true; d.getElementById('clearButton').click(); assert.equal(editor.value,'');
+  await copy(); assert.match(d.getElementById('notification').textContent,/文章を追加して/);
+  d.querySelector('input[value="child"]').click(); assert.equal(d.getElementById('sectionTitle').textContent,'備考（児発）');
+  for (const service of ['child','visit']) {
+    d.querySelector(`input[value="${service}"]`).click();
+    for (const tab of [service,'transition','sharing','family','special']) { clickTab(tab); assert.ok(cards().length,service+'/'+tab); }
+  }
+  assert.equal(d.querySelector('.legacy-link').getAttribute('href'),'legacy/index.html');
+  assert.deepEqual(ctx.errors,[]);
+  ctx.dom.window.close();
+
+  const failure=await boot({failData:true});
+  assert.match(failure.document.querySelector('.empty-state').textContent,/読み込めません/);
+  assert.equal(failure.document.getElementById('versionInfo').textContent,'制度情報を読み込めませんでした。');
+  assert.ok(failure.document.querySelector('.legacy-link'));
+  failure.dom.window.close();
+
+  const text="引用 ' \" <img src=x onerror=alert(1)>\n改行";
+  const escaped=await boot({fixture:{id:'test-special-characters',services:['child'],tabs:['child'],label:'特殊文字',text,pattern:'確認',cat:'一般'}});
+  const fixtureCard=escaped.document.querySelector('[data-template-id="test-special-characters"]');
+  assert.equal(fixtureCard.querySelector('.plan-text').textContent,text);
+  assert.equal(fixtureCard.querySelector('img'),null);
+  fixtureCard.querySelector('button').click();
+  assert.equal(escaped.document.getElementById('custom-text').value,text);
+  escaped.dom.window.close();
+  console.log('DOM checks passed: all service/category combinations, normalized search, adding/editing, clipboard API and fallback logic, clear confirmation, source/legacy links, data-load failure, safe rendering.');
+}
+run().catch(error=>{console.error(error);process.exitCode=1;});
