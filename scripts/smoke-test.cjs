@@ -21,7 +21,7 @@ async function run() {
   const url = 'http://127.0.0.1:'+server.address().port;
   let browser;
   try {
-    browser = await chromium.launch({headless:true});
+    browser = await chromium.launch({headless:true, ...(process.env.CHROMIUM_EXECUTABLE_PATH ? {executablePath:process.env.CHROMIUM_EXECUTABLE_PATH, args:['--no-sandbox','--disable-dev-shm-usage']} : {})});
     const context = await browser.newContext({viewport:{width:1280,height:900},permissions:['clipboard-read','clipboard-write']});
     const page = await context.newPage();
     const errors = [];
@@ -72,12 +72,46 @@ async function run() {
     page.once('dialog',dialog=>dialog.accept());
     await page.getByRole('button',{name:'クリア',exact:true}).click();
     assert.equal(await page.locator('#custom-text').inputValue(),'');
+    await page.getByText('放課後等デイサービス',{exact:true}).click();
+    assert.equal(await page.locator('#sectionTitle').innerText(),'備考（放デイ）');
+    assert.equal(await page.locator('.card').count(),12);
+    const afterSpecialist=page.locator('[data-template-id="plan-child-specialist-delivery"]');
+    await afterSpecialist.locator('summary').click();
+    assert.match(await afterSpecialist.innerText(),/6日未満は月2回/);
+    assert.match(await afterSpecialist.locator('.rule-source a').getAttribute('href'),/#page=54$/);
+    const employment=page.locator('[data-template-id="plan-child-agency-4"]');
+    await employment.getByRole('button').click();
+    const employmentPlan=await page.locator('#custom-text').inputValue();
+    assert.match(employmentPlan,/就職に際して/);
+    assert.ok(!employmentPlan.includes('対象外'));
+    await page.getByRole('button',{name:'クリップボードにコピー',exact:true}).click();
+    // The earlier failure check replaces the clipboard writer; restore the native method.
+    await page.reload();
+    await page.locator('#content-container[aria-busy="false"]').waitFor();
+    await page.getByText('放課後等デイサービス',{exact:true}).click();
+    await page.locator('[data-template-id="plan-child-agency-4"] button').click();
+    await page.getByRole('button',{name:'クリップボードにコピー',exact:true}).click();
+    assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),employmentPlan);
+    assert.equal(await page.locator('[data-template-id="plan-after-individual-support-3"]').count(),1);
+    await page.locator('#searchInput').fill('6日未満');
+    assert.equal(await page.locator('.card').count(),1);
     await page.locator('label').filter({hasText:'児童発達支援'}).click();
+    assert.equal(await page.locator('.card').count(),0);
+    await page.locator('#searchInput').fill('');
     assert.equal(await page.locator('#sectionTitle').innerText(),'備考（児発）');
+    assert.equal(await page.locator('[data-template-id="plan-after-individual-support-3"]').count(),0);
+    await page.getByText('放課後等デイサービス',{exact:true}).click();
+    await page.locator('[data-template-id="plan-child-specialist-delivery"] summary').click();
     await page.screenshot({path:path.join(root,'../hug-desktop.png'),fullPage:true});
     await page.setViewportSize({width:390,height:844});
-    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),'Mobile horizontal overflow');
-    await page.getByRole('button',{name:'家族支援',exact:true}).click();
+    for (const service of ['child','after','visit']) {
+      await page.locator(`input[value="${service}"]`).check();
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),service+': mobile horizontal overflow');
+    }
+    await page.getByText('放課後等デイサービス',{exact:true}).click();
+    await page.locator('#searchInput').fill('個別サポート');
+    await page.locator('[data-template-id="plan-after-individual-support-3"] summary').click();
+    assert.match(await page.locator('#content-container').innerText(),/月1回以上/);
     await page.screenshot({path:path.join(root,'../hug-mobile.png'),fullPage:true});
     assert.deepEqual(errors,[]);
     await page.getByRole('link',{name:'旧版を開く'}).click();
