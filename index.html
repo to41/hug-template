@@ -24,6 +24,7 @@
       <fieldset class="service-picker">
         <legend>サービス</legend>
         <label><input type="radio" name="service" value="child" checked><span>児童発達支援</span></label>
+        <label><input type="radio" name="service" value="after"><span>放課後等デイサービス</span></label>
         <label><input type="radio" name="service" value="visit"><span>保育所等訪問支援</span></label>
       </fieldset>
       <div class="search-wrap">
@@ -35,6 +36,7 @@
       <section class="selection panel" aria-label="文例の選択">
         <nav id="tabs" class="tabs" aria-label="HUGの入力欄">
           <button type="button" data-tab="child" aria-pressed="true">備考（児発）</button>
+          <button type="button" data-tab="after" aria-pressed="false" hidden>備考（放デイ）</button>
           <button type="button" data-tab="visit" aria-pressed="false" hidden>備考（訪問）</button>
           <button type="button" data-tab="transition" aria-pressed="false">移行支援</button>
           <button type="button" data-tab="sharing" aria-pressed="false">学校・療育共有</button>
