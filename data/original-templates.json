@@ -1,0 +1,305 @@
+[
+  {
+    "id": "original-child-1",
+    "tab": "child",
+    "services": [
+      "child"
+    ],
+    "kind": "addition",
+    "pattern": "基本/加算",
+    "cat": "加算",
+    "label": "専門的支援実施加算",
+    "text": "作業療法士、公認心理士、保育士等が専門的な支援内容を計画し実施する(専門的支援実施加算)"
+  },
+  {
+    "id": "original-child-2",
+    "tab": "child",
+    "services": [
+      "child"
+    ],
+    "kind": "addition",
+    "pattern": "基本/加算",
+    "cat": "加算",
+    "label": "関係機関連携加算",
+    "text": "関係機関と連携(幼稚園等・相談支援事業所)し、総合的な支援をしていきます(関係機関連携加算)"
+  },
+  {
+    "id": "original-child-3",
+    "tab": "child",
+    "services": [
+      "child"
+    ],
+    "kind": "general",
+    "pattern": "標準",
+    "cat": "基礎",
+    "label": "アセスメント反映",
+    "text": "今年度のアセスメント結果に基づき、本人の強みを活かした課題設定を行っています。保護者との面談を経て、家庭での様子も反映させています。"
+  },
+  {
+    "id": "original-child-4",
+    "tab": "child",
+    "services": [
+      "child"
+    ],
+    "kind": "general",
+    "pattern": "重点",
+    "cat": "療育",
+    "label": "個別療育の重点",
+    "text": "個別の特性に合わせ、発語の促しと手先の巧緻性を高める活動を中心に行います。小集団の中でのルールの理解も並行して支援します。"
+  },
+  {
+    "id": "original-child-5",
+    "tab": "child",
+    "services": [
+      "child"
+    ],
+    "kind": "general",
+    "pattern": "標準",
+    "cat": "環境",
+    "label": "構造化の配慮",
+    "text": "本人が見通しを持って活動できるよう、スケジュール提示やエリア分けなどの環境設定（構造化）を行い、情緒の安定を図ります。"
+  },
+  {
+    "id": "original-visit-1",
+    "tab": "visit",
+    "services": [
+      "visit"
+    ],
+    "kind": "addition",
+    "pattern": "基本/加算",
+    "cat": "加算",
+    "label": "専門的支援実施加算",
+    "text": "作業療法士、公認心理士、保育士等が専門的な支援内容を計画し実施する(専門的支援実施加算)"
+  },
+  {
+    "id": "original-visit-2",
+    "tab": "visit",
+    "services": [
+      "visit"
+    ],
+    "kind": "addition",
+    "pattern": "基本/加算",
+    "cat": "加算",
+    "label": "多職種連携支援加算",
+    "text": "多職種の職員が同行し支援を行っていきます(多職種連携支援加算)"
+  },
+  {
+    "id": "original-visit-3",
+    "tab": "visit",
+    "services": [
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "連携",
+    "cat": "支援",
+    "label": "訪問先との連携",
+    "text": "保育所における集団生活の様子を観察し、担任教諭と連携して環境調整（視覚支援、座席配置等）のアドバイスを行います。"
+  },
+  {
+    "id": "original-visit-4",
+    "tab": "visit",
+    "services": [
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "連携",
+    "cat": "共有",
+    "label": "一貫した支援",
+    "text": "訪問支援での知見を園側と共有し、園と家庭、事業所が足並みを揃えた一貫性のある支援を提供できるよう調整します。"
+  },
+  {
+    "id": "original-transition-1",
+    "tab": "transition",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "連携",
+    "cat": "移行支援",
+    "label": "園との生活状況共有",
+    "text": "園での生活状況と事業所での支援内容について、必要に応じて情報共有を行う。"
+  },
+  {
+    "id": "original-transition-2",
+    "tab": "transition",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "標準的・汎用",
+    "cat": "移行支援",
+    "label": "円滑な移行",
+    "text": "就学先や移行先の施設に対し、本人の特性や有効な支援方法、集団内での様子について情報共有を行い、円滑な移行を図る。"
+  },
+  {
+    "id": "original-transition-3",
+    "tab": "transition",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "併設園の強み",
+    "cat": "移行支援",
+    "label": "具体的エピソード",
+    "text": "保育所での集団生活における具体的なエピソードや、環境設定による適応状況を整理し、移行先での配慮事項として共有を図る。"
+  },
+  {
+    "id": "original-transition-4",
+    "tab": "transition",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "連携重視",
+    "cat": "移行支援",
+    "label": "体制構築",
+    "text": "関係機関と緊密に連携し、個別支援計画やケース会議を通して、本人の特性に合わせた合理的配慮や一貫した支援体制を構築する。"
+  },
+  {
+    "id": "original-transition-5",
+    "tab": "transition",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "安定優先",
+    "cat": "移行支援",
+    "label": "心理的配慮",
+    "text": "本人が新しい環境で安心して過ごせるよう、これまでの成功体験やパニック時の対応、特性に応じた声掛けの工夫を詳細に引き継ぐ。"
+  },
+  {
+    "id": "original-sharing-1",
+    "tab": "sharing",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "包括的",
+    "cat": "情報共有",
+    "label": "基本連携",
+    "text": "学校での生活状況と事業所での支援内容について定期的または必要に応じて情報共有を行い、一貫性のある支援体制を整える。"
+  },
+  {
+    "id": "original-sharing-2",
+    "tab": "sharing",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "分析的",
+    "cat": "情報共有",
+    "label": "多角的視点",
+    "text": "学校での学習・集団生活の様子と、療育場面での特性や変化を照らし合わせ、多角的な視点から本人の理解と支援方法の統一を図る。"
+  },
+  {
+    "id": "original-sharing-3",
+    "tab": "sharing",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "適応重視",
+    "cat": "情報共有",
+    "label": "環境共有",
+    "text": "園（保育所）生活で培った集団適応のスキルを学校生活でも発揮できるよう、具体的な環境設定や配慮事項について学校側と共有・連携する。"
+  },
+  {
+    "id": "original-family-1",
+    "tab": "family",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "専門的",
+    "cat": "家族支援",
+    "label": "活動目的と変化の共有",
+    "text": "身体の使い方の変化や、この動きをするとどのような育みがあるのか、どのような目的で活動を展開しているかを、適宜お伝えする。"
+  },
+  {
+    "id": "original-family-2",
+    "tab": "family",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "包括的",
+    "cat": "家族支援",
+    "label": "家庭生活の安定",
+    "text": "家族との面談や日々の相談を通じ、行動や言葉の背景にある本人の特性への理解を深めるとともに、適切な対応を共有することで家庭生活の安定と充実を図る。"
+  },
+  {
+    "id": "original-family-3",
+    "tab": "family",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "共感・伴走",
+    "cat": "家族支援",
+    "label": "一貫性のある関わり",
+    "text": "療育場面や面談を通じ、本人の行動意図や内的状況を家族へ丁寧に伝え、共通の理解に基づいた一貫性のある関わりを行うことで、豊かな生活の実現を支援する。"
+  },
+  {
+    "id": "original-family-4",
+    "tab": "family",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "簡潔",
+    "cat": "家族支援",
+    "label": "三者一体の向上",
+    "text": "定期的な面談や相談の機会を設け、本人の行動背景や特性に合わせた関わり方を家族と共有し、園・家庭・事業所が一体となって生活の質を向上させる。"
+  },
+  {
+    "id": "original-special-1",
+    "tab": "special",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "標準",
+    "cat": "特記事項",
+    "label": "利用調整（基本）",
+    "text": "利用者、園、学校の都合、または長期休暇（春・夏・冬休み等）の際は、必要に応じて利用曜日や時間帯の変更、および追加利用の調整を行う。"
+  },
+  {
+    "id": "original-special-2",
+    "tab": "special",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "柔軟性重視",
+    "cat": "特記事項",
+    "label": "状況への適応",
+    "text": "本人の状況や園・学校行事、長期休暇等の環境変化に合わせ、支援の継続性を確保するため、利用日時を柔軟に変更・追加する場合がある。"
+  },
+  {
+    "id": "original-special-3",
+    "tab": "special",
+    "services": [
+      "child",
+      "visit"
+    ],
+    "kind": "general",
+    "pattern": "簡潔",
+    "cat": "特記事項",
+    "label": "事務的対応",
+    "text": "諸事情（本人・園・学校都合）や長期休暇期間においては、提供日および提供時間を適宜変更・追加し、状況に応じた支援体制を敷く。"
+  }
+]
