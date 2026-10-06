@@ -79,8 +79,41 @@ async function run() {
   w.confirm=()=>false; d.getElementById('clearButton').click(); assert.ok(editor.value);
   w.confirm=()=>true; d.getElementById('clearButton').click(); assert.equal(editor.value,'');
   await copy(); assert.match(d.getElementById('notification').textContent,/文章を追加して/);
+  d.querySelector('input[value="after"]').click();
+  assert.equal(d.getElementById('sectionTitle').textContent,'備考（放デイ）');
+  assert.equal(d.querySelector('[data-tab="child"]').hidden,true);
+  assert.equal(d.querySelector('[data-tab="after"]').hidden,false);
+  assert.equal(d.querySelector('[data-tab="visit"]').hidden,true);
+  assert.equal(cards().length,12);
+  assert.match(card('plan-child-specialist-delivery').textContent,/6日未満は月2回/);
+  assert.match(card('plan-child-specialist-delivery').querySelector('.rule-source a').href,/#page=54$/);
+  assert.match(card('plan-child-agency-4').querySelector('.plan-text').textContent,/就職に際して/);
+  card('plan-child-agency-4').querySelector('.add-button').click();
+  assert.match(editor.value,/就職に際して/);
+  assert.ok(!editor.value.includes('対象外'));
+  assert.ok(card('plan-after-individual-support-3'));
+  assert.ok(card('plan-after-independence-support'));
+  assert.ok(card('plan-after-independent-attendance'));
+  search('6日未満'); assert.equal(cards().length,1);
+  d.querySelector('input[value="child"]').click(); assert.equal(cards().length,0);
+  search('');
+  assert.match(card('plan-child-specialist-delivery').textContent,/12日未満は月4回/);
+  assert.ok(!card('plan-child-specialist-delivery').textContent.includes('6日未満'));
+  assert.equal(card('plan-after-individual-support-3'),null);
+  d.querySelector('input[value="after"]').click(); clickTab('family');
+  assert.match(card('plan-child-family-1').textContent,/個別サポート加算（Ⅲ）/);
+  assert.match(card('original-family-4').querySelector('.plan-text').textContent,/学校・家庭・事業所/);
+  clickTab('transition');
+  assert.equal(card('original-transition-1').querySelector('h3').textContent,'学校との生活状況共有');
+  card('original-transition-1').querySelector('.add-button').click();
+  assert.ok(editor.value.endsWith('学校での生活状況と事業所での支援内容について、必要に応じて情報共有を行う。'));
+  clickTab('family');
+  d.querySelector('input[value="child"]').click();
+  assert.ok(!card('plan-child-family-1').textContent.includes('個別サポート加算（Ⅲ）'));
+  assert.match(card('original-family-4').querySelector('.plan-text').textContent,/園・家庭・事業所/);
+  clickTab('child');
   d.querySelector('input[value="child"]').click(); assert.equal(d.getElementById('sectionTitle').textContent,'備考（児発）');
-  for (const service of ['child','visit']) {
+  for (const service of ['child','after','visit']) {
     d.querySelector(`input[value="${service}"]`).click();
     for (const tab of [service,'transition','sharing','family','special']) { clickTab(tab); assert.ok(cards().length,service+'/'+tab); }
   }
