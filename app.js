@@ -1,7 +1,8 @@
 'use strict';
 
 const state = { service: 'child', tab: 'child', query: '', templates: [], additions: new Map(), metadata: null };
-const tabLabels = { child: '備考（児発）', visit: '備考（訪問）', transition: '移行支援', sharing: '学校・療育共有', family: '家族支援', special: '特記事項' };
+const serviceTabs = new Set(['child', 'after', 'visit']);
+const tabLabels = { child: '備考（児発）', after: '備考（放デイ）', visit: '備考（訪問）', transition: '移行支援', sharing: '学校・療育共有', family: '家族支援', special: '特記事項' };
 let notificationTimer;
 
 function element(tag, className, text) {
@@ -13,12 +14,20 @@ function element(tag, className, text) {
 
 function normalize(value) { return String(value || '').normalize('NFKC').toLocaleLowerCase('ja').trim(); }
 
+function templateText(item) { return item.serviceTexts?.[state.service] ?? item.text; }
+function templateLabel(item) { return item.serviceLabels?.[state.service] ?? item.label; }
+
+function ruleFor(item) {
+  const rule = state.additions.get(item.additionId);
+  return rule ? { ...rule, ...rule.serviceOverrides?.[state.service] } : null;
+}
+
 function visibleTemplates() {
   const terms = normalize(state.query).split(/\s+/).filter(Boolean);
   return state.templates.filter(item => {
     if (!item.services.includes(state.service) || !item.tabs.includes(state.tab)) return false;
-    const rule = state.additions.get(item.additionId);
-    const searchable = normalize([item.label, item.text, item.pattern, item.cat, rule?.label, rule?.summary, ...(rule?.checks || [])].join(' '));
+    const rule = ruleFor(item);
+    const searchable = normalize([templateLabel(item), templateText(item), item.pattern, item.cat, rule?.label, rule?.summary, ...(rule?.checks || [])].join(' '));
     return terms.every(term => searchable.includes(term));
   });
 }
@@ -52,7 +61,7 @@ function renderContent() {
   document.getElementById('resultCount').textContent = `${items.length}件`;
   document.querySelectorAll('[data-tab]').forEach(button => {
     const tab = button.dataset.tab;
-    button.hidden = (tab === 'child' && state.service !== 'child') || (tab === 'visit' && state.service !== 'visit');
+    button.hidden = serviceTabs.has(tab) && tab !== state.service;
     button.setAttribute('aria-pressed', String(tab === state.tab));
   });
   if (!items.length) {
@@ -60,19 +69,21 @@ function renderContent() {
     return;
   }
   for (const item of items) {
-    const rule = state.additions.get(item.additionId);
+    const rule = ruleFor(item);
+    const text = templateText(item);
+    const label = templateLabel(item);
     const card = element('article', 'card');
     card.dataset.templateId = item.id;
     const tags = element('div', 'card-tags');
     tags.append(element('span', `tag ${rule ? 'addition' : 'general'}`, rule ? '加算関連' : '一般支援文'));
     tags.append(element('span', 'tag', item.pattern));
-    card.append(tags, element('h3', '', item.label));
+    card.append(tags, element('h3', '', label));
     if (rule) card.append(element('p', 'card-summary', rule.summary));
-    card.append(element('p', 'plan-text', item.text));
+    card.append(element('p', 'plan-text', text));
     const addButton = element('button', 'add-button', '＋ 文章を追加');
     addButton.type = 'button';
-    addButton.setAttribute('aria-label', `${item.label}の文章を追加`);
-    addButton.addEventListener('click', () => addToEditor(item.text));
+    addButton.setAttribute('aria-label', `${label}の文章を追加`);
+    addButton.addEventListener('click', () => addToEditor(text));
     card.append(addButton);
     if (rule) card.append(ruleDetails(rule));
     container.append(card);
@@ -128,7 +139,7 @@ async function copyCustom() {
 function bindControls() {
   document.querySelectorAll('input[name="service"]').forEach(input => input.addEventListener('change', () => {
     state.service = input.value;
-    if (state.tab === 'child' || state.tab === 'visit') state.tab = state.service;
+    if (serviceTabs.has(state.tab)) state.tab = state.service;
     renderContent();
   }));
   document.querySelectorAll('[data-tab]').forEach(button => button.addEventListener('click', () => { state.tab = button.dataset.tab; renderContent(); }));
