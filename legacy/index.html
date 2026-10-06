@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUG個別支援計画 作成支援ツール</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .tab-active {
+            border-bottom: 4px solid #2563eb;
+            color: #1e40af;
+            background-color: #ffffff;
+        }
+        .copy-notification {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 12px 24px;
+            background: #10b981;
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
+            transform: translateY(150px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+        }
+        .copy-notification.show {
+            transform: translateY(0);
+        }
+        .card-item {
+            transition: all 0.2s ease;
+            border: 1px solid #e2e8f0;
+        }
+        .card-item:hover {
+            border-color: #3b82f6;
+            background-color: #ffffff;
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+        .pattern-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 6px;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <div class="max-w-6xl mx-auto my-6 px-4 pb-20">
+        <!-- Header -->
+        <header class="bg-white rounded-3xl p-6 mb-6 shadow-sm border border-gray-200 flex flex-col lg:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-4">
+                <div class="bg-blue-600 p-3 rounded-2xl shadow-blue-200 shadow-lg">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">HUG 支援計画作成アシスト</h1>
+                    <p class="text-slate-500 font-medium text-sm">文言パターンを組み合わせて計画書を素早く構成</p>
+                </div>
+            </div>
+            <div class="relative w-full lg:w-96">
+                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </span>
+                <input type="text" id="searchInput" oninput="filterTemplates()" placeholder="キーワードで絞り込み..." class="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:outline-none transition-all">
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            <!-- Left Side: Selection Area -->
+            <div class="xl:col-span-2 space-y-6">
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                    <!-- Navigation -->
+                    <nav class="flex overflow-x-auto bg-slate-50 border-b no-scrollbar">
+                        <button onclick="switchTab('child')" id="tab-child" class="whitespace-nowrap py-4 px-6 font-bold text-slate-500 hover:text-blue-600 transition-all tab-active">備考(児発)</button>
+                        <button onclick="switchTab('visit')" id="tab-visit" class="whitespace-nowrap py-4 px-6 font-bold text-slate-500 hover:text-blue-600 transition-all">備考(訪問)</button>
+                        <button onclick="switchTab('transition')" id="tab-transition" class="whitespace-nowrap py-4 px-6 font-bold text-slate-500 hover:text-blue-600 transition-all">移行支援</button>
+                        <button onclick="switchTab('sharing')" id="tab-sharing" class="whitespace-nowrap py-4 px-6 font-bold text-slate-500 hover:text-blue-600 transition-all">学校・療育共有</button>
+                        <button onclick="switchTab('family')" id="tab-family" class="whitespace-nowrap py-4 px-6 font-bold text-slate-500 hover:text-blue-600 transition-all">家族支援</button>
+                        <button onclick="switchTab('special')" id="tab-special" class="whitespace-nowrap py-4 px-6 font-bold text-slate-500 hover:text-blue-600 transition-all">特記事項</button>
+                    </nav>
+
+                    <div class="p-6">
+                        <div id="content-container">
+                            <!-- Content injected by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Editor Area -->
+            <div class="xl:col-span-1">
+                <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-6 sticky top-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="font-bold text-slate-900 flex items-center gap-2">
+                            <span class="w-2 h-6 bg-blue-600 rounded-full"></span>
+                            構成ワークエリア
+                        </h2>
+                        <button onclick="clearCustom()" class="text-xs text-slate-400 hover:text-red-500 font-bold transition-colors flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            クリア
+                        </button>
+                    </div>
+                    
+                    <textarea id="custom-text" class="w-full h-[400px] xl:h-[500px] p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:outline-none text-slate-700 leading-relaxed transition-all resize-none mb-4" placeholder="上のパターンをクリックすると、ここに文章が追加されます。直接編集も可能です。"></textarea>
+                    
+                    <button onclick="copyCustom()" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-blue-700 active:scale-[0.98] transition-all shadow-xl flex items-center justify-center gap-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        クリップボードにコピー
+                    </button>
+                    
+                    <p class="text-[10px] text-slate-400 mt-4 text-center leading-tight">
+                        ※HUGの各入力欄に貼り付けて使用してください。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="copy-notification flex items-center font-bold">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span>コピーしました！</span>
+    </div>
+
+    <script>
+        const templates = {
+            child: [
+                { pattern: "基本/加算", cat: "加算", label: "専門的支援実施加算", text: "作業療法士、公認心理士、保育士等が専門的な支援内容を計画し実施する(専門的支援実施加算)" },
+                { pattern: "基本/加算", cat: "加算", label: "関係機関連携加算", text: "関係機関と連携(幼稚園等・相談支援事業所)し、総合的な支援をしていきます(関係機関連携加算)" },
+                { pattern: "標準", cat: "基礎", label: "アセスメント反映", text: "今年度のアセスメント結果に基づき、本人の強みを活かした課題設定を行っています。保護者との面談を経て、家庭での様子も反映させています。" },
+                { pattern: "重点", cat: "療育", label: "個別療育の重点", text: "個別の特性に合わせ、発語の促しと手先の巧緻性を高める活動を中心に行います。小集団の中でのルールの理解も並行して支援します。" },
+                { pattern: "標準", cat: "環境", label: "構造化の配慮", text: "本人が見通しを持って活動できるよう、スケジュール提示やエリア分けなどの環境設定（構造化）を行い、情緒の安定を図ります。" }
+            ],
+            visit: [
+                { pattern: "基本/加算", cat: "加算", label: "専門的支援実施加算", text: "作業療法士、公認心理士、保育士等が専門的な支援内容を計画し実施する(専門的支援実施加算)" },
+                { pattern: "基本/加算", cat: "加算", label: "多職種連携支援加算", text: "多職種の職員が同行し支援を行っていきます(多職種連携支援加算)" },
+                { pattern: "連携", cat: "支援", label: "訪問先との連携", text: "保育所における集団生活の様子を観察し、担任教諭と連携して環境調整（視覚支援、座席配置等）のアドバイスを行います。" },
+                { pattern: "連携", cat: "共有", label: "一貫した支援", text: "訪問支援での知見を園側と共有し、園と家庭、事業所が足並みを揃えた一貫性のある支援を提供できるよう調整します。" }
+            ],
+            transition: [
+                { pattern: "連携", cat: "移行支援", label: "園との生活状況共有", text: "園での生活状況と事業所での支援内容について、必要に応じて情報共有を行う。" },
+                { pattern: "標準的・汎用", cat: "移行支援", label: "円滑な移行", text: "就学先や移行先の施設に対し、本人の特性や有効な支援方法、集団内での様子について情報共有を行い、円滑な移行を図る。" },
+                { pattern: "併設園の強み", cat: "移行支援", label: "具体的エピソード", text: "保育所での集団生活における具体的なエピソードや、環境設定による適応状況を整理し、移行先での配慮事項として共有を図る。" },
+                { pattern: "連携重視", cat: "移行支援", label: "体制構築", text: "関係機関と緊密に連携し、個別支援計画やケース会議を通して、本人の特性に合わせた合理的配慮や一貫した支援体制を構築する。" },
+                { pattern: "安定優先", cat: "移行支援", label: "心理的配慮", text: "本人が新しい環境で安心して過ごせるよう、これまでの成功体験やパニック時の対応、特性に応じた声掛けの工夫を詳細に引き継ぐ。" }
+            ],
+            sharing: [
+                { pattern: "包括的", cat: "情報共有", label: "基本連携", text: "学校での生活状況と事業所での支援内容について定期的または必要に応じて情報共有を行い、一貫性のある支援体制を整える。" },
+                { pattern: "分析的", cat: "情報共有", label: "多角的視点", text: "学校での学習・集団生活の様子と、療育場面での特性や変化を照らし合わせ、多角的な視点から本人の理解と支援方法の統一を図る。" },
+                { pattern: "適応重視", cat: "情報共有", label: "環境共有", text: "園（保育所）生活で培った集団適応のスキルを学校生活でも発揮できるよう、具体的な環境設定や配慮事項について学校側と共有・連携する。" }
+            ],
+            family: [
+                { pattern: "専門的", cat: "家族支援", label: "活動目的と変化の共有", text: "身体の使い方の変化や、この動きをするとどのような育みがあるのか、どのような目的で活動を展開しているかを、適宜お伝えする。" },
+                { pattern: "包括的", cat: "家族支援", label: "家庭生活の安定", text: "家族との面談や日々の相談を通じ、行動や言葉の背景にある本人の特性への理解を深めるとともに、適切な対応を共有することで家庭生活の安定と充実を図る。" },
+                { pattern: "共感・伴走", cat: "家族支援", label: "一貫性のある関わり", text: "療育場面や面談を通じ、本人の行動意図や内的状況を家族へ丁寧に伝え、共通の理解に基づいた一貫性のある関わりを行うことで、豊かな生活の実現を支援する。" },
+                { pattern: "簡潔", cat: "家族支援", label: "三者一体の向上", text: "定期的な面談や相談の機会を設け、本人の行動背景や特性に合わせた関わり方を家族と共有し、園・家庭・事業所が一体となって生活の質を向上させる。" }
+            ],
+            special: [
+                { pattern: "標準", cat: "特記事項", label: "利用調整（基本）", text: "利用者、園、学校の都合、または長期休暇（春・夏・冬休み等）の際は、必要に応じて利用曜日や時間帯の変更、および追加利用の調整を行う。" },
+                { pattern: "柔軟性重視", cat: "特記事項", label: "状況への適応", text: "本人の状況や園・学校行事、長期休暇等の環境変化に合わせ、支援の継続性を確保するため、利用日時を柔軟に変更・追加する場合がある。" },
+                { pattern: "簡潔", cat: "特記事項", label: "事務的対応", text: "諸事情（本人・園・学校都合）や長期休暇期間においては、提供日および提供時間を適宜変更・追加し、状況に応じた支援体制を敷く。" }
+            ]
+        };
+
+        let currentTab = 'child';
+
+        function init() {
+            renderContent();
+        }
+
+        function renderContent() {
+            const container = document.getElementById('content-container');
+            const data = templates[currentTab];
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filtered = data.filter(item => 
+                item.pattern.toLowerCase().includes(searchVal) || 
+                item.label.toLowerCase().includes(searchVal) || 
+                item.text.toLowerCase().includes(searchVal)
+            );
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 text-slate-400 font-medium">条件に合うパターンが見つかりませんでした。</div>`;
+                return;
+            }
+
+            let html = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">`;
+            filtered.forEach(item => {
+                let patternColor = "bg-slate-100 text-slate-600";
+                if(item.pattern.includes("標準")) patternColor = "bg-blue-50 text-blue-700 border border-blue-100";
+                if(item.pattern.includes("連携") || item.pattern.includes("共有")) patternColor = "bg-emerald-50 text-emerald-700 border border-emerald-100";
+                if(item.pattern.includes("重点") || item.pattern.includes("優先")) patternColor = "bg-violet-50 text-violet-700 border border-violet-100";
+                if(item.pattern.includes("加算") || item.pattern.includes("専門性") || item.pattern.includes("専門的")) patternColor = "bg-orange-50 text-orange-700 border border-orange-100";
+                if(item.pattern.includes("簡潔")) patternColor = "bg-amber-50 text-amber-700 border border-amber-100";
+
+                html += `
+                    <div onclick="addToEditor('${item.text.replace(/'/g, "\\'")}')" class="card-item group p-5 rounded-2xl cursor-pointer bg-white flex flex-col justify-between">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                <span class="pattern-tag ${patternColor}">${item.pattern}</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${item.cat}</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 mb-2 text-sm">${item.label}</h4>
+                            <p class="text-slate-500 text-xs leading-relaxed line-clamp-3">${item.text}</p>
+                        </div>
+                        <div class="mt-4 flex justify-end">
+                             <div class="bg-slate-50 group-hover:bg-blue-600 p-1 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                             </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function addToEditor(text) {
+            const editor = document.getElementById('custom-text');
+            if (editor.value.trim().length > 0) {
+                editor.value += "\n" + text;
+            } else {
+                editor.value = text;
+            }
+            editor.scrollTop = editor.scrollHeight;
+            showNotification("ワークエリアに追加しました");
+        }
+
+        function copyCustom() {
+            const text = document.getElementById('custom-text').value;
+            if (!text.trim()) return;
+
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showNotification("クリップボードにコピーしました");
+        }
+
+        function clearCustom() {
+            const editor = document.getElementById('custom-text');
+            if(editor.value.trim() !== "" && confirm("ワークエリアをクリアしますか？")) {
+                editor.value = '';
+            }
+        }
+
+        function filterTemplates() {
+            renderContent();
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('tab-active', 'text-blue-600'));
+            document.getElementById(`tab-${tab}`).classList.add('tab-active', 'text-blue-600');
+            renderContent();
+        }
+
+        function showNotification(msg) {
+            const n = document.getElementById('notification');
+            n.querySelector('span').innerText = msg;
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2500);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

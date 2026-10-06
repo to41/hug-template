@@ -1,0 +1,14 @@
+{
+  "name": "hug-template",
+  "version": "2026.10.6",
+  "private": true,
+  "scripts": {
+    "test": "node scripts/check-data.cjs && node scripts/dom-test.cjs",
+    "test:data": "node scripts/check-data.cjs",
+    "test:browser": "node scripts/smoke-test.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1",
+    "jsdom": "30.1.2"
+  }
+}
