@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HUG 支援計画作成アシスト｜2026年対応</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="header panel">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">▤</div>
+        <div>
+          <p class="eyebrow">HUG TEMPLATE <span class="version">2026年対応</span></p>
+          <h1>支援計画作成アシスト</h1>
+          <p class="subtitle">文言パターンを組み合わせて計画書を素早く構成</p>
+        </div>
+      </div>
+      <a class="legacy-link" href="legacy/index.html">旧版を開く ↗</a>
+    </header>
+    <section class="toolbar panel" aria-label="文例の絞り込み">
+      <fieldset class="service-picker">
+        <legend>サービス</legend>
+        <label><input type="radio" name="service" value="child" checked><span>児童発達支援</span></label>
+        <label><input type="radio" name="service" value="visit"><span>保育所等訪問支援</span></label>
+      </fieldset>
+      <div class="search-wrap">
+        <label for="searchInput">文例を検索</label>
+        <input id="searchInput" type="search" placeholder="加算名・連携先・支援内容など" autocomplete="off">
+      </div>
+    </section>
+    <div class="workspace">
+      <section class="selection panel" aria-label="文例の選択">
+        <nav id="tabs" class="tabs" aria-label="HUGの入力欄">
+          <button type="button" data-tab="child" aria-pressed="true">備考（児発）</button>
+          <button type="button" data-tab="visit" aria-pressed="false" hidden>備考（訪問）</button>
+          <button type="button" data-tab="transition" aria-pressed="false">移行支援</button>
+          <button type="button" data-tab="sharing" aria-pressed="false">学校・療育共有</button>
+          <button type="button" data-tab="family" aria-pressed="false">家族支援</button>
+          <button type="button" data-tab="special" aria-pressed="false">特記事項</button>
+        </nav>
+        <div class="selection-body">
+          <div class="section-line"><h2 id="sectionTitle">備考（児発）</h2><span id="resultCount" class="result-count" aria-live="polite"></span></div>
+          <p id="serviceNote" class="service-note">加算関連の文例は、事業所の届出・対象者・実施内容に合わせて選んでください。</p>
+          <div id="content-container" class="cards" aria-busy="true"><p class="empty-state" role="status">文例を読み込んでいます。</p></div>
+        </div>
+      </section>
+      <aside class="editor panel" aria-label="文章の編集">
+        <div class="section-line"><h2><span class="accent" aria-hidden="true"></span>構成ワークエリア</h2><button type="button" id="clearButton" class="text-button">クリア</button></div>
+        <label class="sr-only" for="custom-text">HUGに貼り付ける文章</label>
+        <textarea id="custom-text" placeholder="文例の「文章を追加」を押すと、ここに追加されます。直接編集も可能です。"></textarea>
+        <div class="editor-meta"><span>追加後に、本人・家族の状況に合わせて編集できます。</span><span id="charCount">0字</span></div>
+        <button type="button" id="copyButton" class="copy-button">クリップボードにコピー</button>
+        <p class="editor-note">HUGの各入力欄に貼り付けて使用してください。</p>
+      </aside>
+    </div>
+    <footer class="footer"><p id="versionInfo">制度情報を確認しています。</p><a href="https://www.cfa.go.jp/policies/shougaijishien/shisaku/r8hoshukaitei" target="_blank" rel="noopener noreferrer">こども家庭庁の報酬改定資料 ↗</a></footer>
+  </main>
+  <div id="notification" class="notification" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
